@@ -7,9 +7,21 @@ from rest_framework.views import APIView
 from rest_framework import serializers, status
 from django.http import Http404, JsonResponse
 from .models import *
-from .serializers import CategorySerliazer, CourseSerliazer, PaymentSerliazer
+from .serializers import CartCourserSerializer, CategorySerliazer, CourseSerliazer, PaymentSerliazer, UserSerializer
 
-# Create your views here.
+class ListUser(APIView):
+    def get(self, request, *args, **kwargs):   
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class ListCourses(APIView):
     def get(self, request, *args, **kwargs):   
         courses = Course.objects.all()
@@ -125,3 +137,19 @@ class PaymentDetail(APIView):
         payments = self.get_object(pk)
         payments.delete()
         return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
+
+
+class ListCart(APIView):
+    def get(self, request, *args, **kwargs):   
+        items = CartCourses.objects.filter(id_cart__user=request.user)
+        serializer = CartCourserSerializer(items, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        id_cart = Cart.objects.get(user=request.user)
+        serializer = CartCourserSerializer(data={'id_course':request.data['id_course'], 'id_cart':id_cart})
+        # CartCourses.objects.create(id_cart=id_cart, id_courses=request.data['id_course'])
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
