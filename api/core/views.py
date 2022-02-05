@@ -14,7 +14,7 @@ class ListCourses(APIView):
     def get(self, request, *args, **kwargs):   
         courses = Course.objects.all()
         serializer = CourseSerliazer(courses, many=True)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         serializer = CourseSerliazer(data=request.data)
