@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework import serializers, status
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from .models import *
-from .serializers import CourseSerliazer
+from .serializers import CategorySerliazer, CourseSerliazer, PaymentSerliazer
 
 # Create your views here.
 class ListCourses(APIView):
@@ -22,3 +22,106 @@ class ListCourses(APIView):
             serializer.save()
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CourseDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Course.objects.get(id=pk)
+        except Course.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk):
+        course = self.get_object(pk)
+        serializer = CourseSerliazer(course, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    def put(self, request, pk):
+        course = self.get_object(pk)
+        serializer = CourseSerliazer(course, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        course = self.get_object(pk)
+        course.delete()
+        return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
+
+
+class ListCategories(APIView):
+    def get(self, request, *args, **kwargs):   
+        categories = Category.objects.all()
+        serializer = CategorySerliazer(categories, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = CategorySerliazer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CategoriesDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Category.objects.get(id=pk)
+        except Category.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk):
+        category = self.get_object(pk)
+        serializer = CategorySerliazer(category, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    def put(self, request, pk):
+        category = self.get_object(pk)
+        serializer = CategorySerliazer(category, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        category = self.get_object(pk)
+        category.delete()
+        return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
+
+
+class ListPayment(APIView):
+    def get(self, request, *args, **kwargs):   
+        payments = Payment.objects.all()
+        serializer = PaymentSerliazer(payments, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = PaymentSerliazer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PaymentDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Payment.objects.get(id=pk)
+        except Payment.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk):
+        payments = self.get_object(pk)
+        serializer = PaymentSerliazer(payments, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    def put(self, request, pk):
+        payments = self.get_object(pk)
+        serializer = PaymentSerliazer(payments, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        payments = self.get_object(pk)
+        payments.delete()
+        return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
