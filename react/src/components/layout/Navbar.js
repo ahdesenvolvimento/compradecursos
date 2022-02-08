@@ -7,11 +7,9 @@ export default function NavBar() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#/">
-          <Link to="/">Compra de Cursos</Link>
-        </a>
+        <Link to="/" className="navbar-brand" >Compra de Cursos</Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -28,20 +26,11 @@ export default function NavBar() {
           id="navbarNavAltMarkup"
         >
           <div className="navbar-nav">
-            <a className="nav-link active" aria-current="page" href="#/">
-              <Link to="/categories">Categorias</Link>
-            </a>
+            <Link to="/categories" className="nav-link active">Categorias</Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item ><Link to="/courses">Cursos</Link></NavDropdown.Item>
-              <NavDropdown.Item ><Link to="/courses">Meus cursos</Link></NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
+              <NavDropdown.Item ><Link to="/courses">Criar Curso</Link></NavDropdown.Item>
+              <NavDropdown.Item ><Link to="/courses">Meus Cursos</Link></NavDropdown.Item>
             </NavDropdown>
-            <a className="nav-link active" aria-current="page" href="#/">
-              <Link to="/courses">Cursos</Link>
-            </a>
             <a
               className="nav-link active"
               onClick={handleShow}
