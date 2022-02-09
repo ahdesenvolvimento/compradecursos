@@ -45,7 +45,7 @@ export default function Course() {
           <div className="card">
           <div className="card-header fw-bold">{course.name}</div>
               <div className="card-body">
-                <p>Valor: R$ {course.price.toFixed(2)}</p>
+                <p>Valor: R$ {course.price}</p>
                 <p>Descrição: {course.description}</p>
                 {/* <p>Categoria: {item.</p> */}
               </div>

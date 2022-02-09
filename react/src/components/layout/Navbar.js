@@ -101,7 +101,7 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
                   Categorias
                 </Link>
                 <Link
-                  to="/categories"
+                  to="/orders"
                   className="nav-link active text-white fw-bold"
                 >
                   Meu pedidos
@@ -190,6 +190,7 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
           </table>
         </Modal.Body>
         <Modal.Footer>
+          <Button variant="primary" ><Link to="/order" className="text-white">Finalizar pedido</Link></Button>
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>

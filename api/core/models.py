@@ -1,3 +1,4 @@
+from email.policy import default
 from pyexpat import model
 from statistics import mode
 from django.db import models
@@ -15,13 +16,6 @@ class Category(Base):
 
     class Meta:
         db_table = 'categories'
-
-class Payment(Base):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        db_table = 'payment'
 
 class Course(Base):
     id = models.AutoField(primary_key=True)
@@ -54,6 +48,7 @@ class CartCourses(Base):
 class Order(Base):
     id = models.AutoField(primary_key=True)
     status = models.BooleanField(default=False)
+    user = models.ForeignKey(User, null=True, default='', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'order'

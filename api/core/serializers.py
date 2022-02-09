@@ -14,12 +14,6 @@ class CategorySerliazer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
-
-class PaymentSerliazer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = '__all__'
-
 class UserSerializer(serializers.ModelSerializer):
     def validate_password(self, value):
         return make_password(value)
