@@ -27,9 +27,9 @@ class Course(Base):
     name = models.CharField(max_length=255)
     price = models.FloatField()
     description = models.TextField()
-    # id_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    # image = models.ImageField(upload_to='media/')
-
+    id_category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, default='')
+    image = models.ImageField(upload_to='media/', null=True, default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default='')
     class Meta:
         db_table = 'course'
 

@@ -2,6 +2,7 @@ from pyexpat import model
 from rest_framework import serializers
 from .models import *
 from django.contrib.auth.hashers import make_password
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 class CourseSerliazer(serializers.ModelSerializer):
     class Meta:
@@ -34,3 +35,19 @@ class CartCourserSerializer(serializers.ModelSerializer):
         fields = ('id_cart', 'id_courses', )
 
         
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    default_error_messages = {
+        'bad token': ('Token is expired or invalid')
+    }
+
+    def validate(self, attrs):
+        self.token = attrs['refresh']
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            RefreshToken(self.token).blacklist()
+        except TokenError:
+            self.fail('bad token')

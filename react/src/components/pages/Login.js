@@ -19,8 +19,13 @@ export default function Login() {
       body: JSON.stringify(user),
     };
     fetch("http://localhost:8000/api/token/", init)
-      .then()
-      .then()
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        localStorage.setItem("access-token", data.access);
+        localStorage.setItem("refresh-token", data.refresh);
+        console.log(localStorage.getItem('access-token'));
+      })
       .catch((error) => console.log(error));
   };
   return (

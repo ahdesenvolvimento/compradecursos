@@ -145,7 +145,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(STATIC_URL, 'staticfields')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(MEDIA_URL, 'media')
 
 # Default primary key field type

@@ -10,14 +10,14 @@ export default function Categories() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Autorization:'Bearer ' + localStorage.getItem('access-token')
       },
       body: JSON.stringify(categorie),
     };
-    fetch("http://localhost:8000/courses/")
+    fetch("http://localhost:8000/categories/", init)
       .then()
       .then()
       .catch((error) => console.log(error));
-    console.log(categorie);
   };
 
   const handleChange = (e) => {

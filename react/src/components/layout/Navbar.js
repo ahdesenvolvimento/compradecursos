@@ -1,11 +1,27 @@
 import { Link } from "react-router-dom";
 import { Modal, Button, NavDropdown } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function NavBar() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [cart, setCart] = useState([]);
+  useEffect(() => {
+    const init = {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access-token'),
+      }
+    }
+    fetch('http://localhost:8000/cart/', init)
+    .then((response) => response.json())
+    .then((data) => {
+      setCart(data)
+    }).catch((error) => console.log(error))
+  }, [])
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
@@ -37,7 +53,7 @@ export default function NavBar() {
               aria-current="page"
               href="#/"
             >
-              Teste
+              Carrinho
             </a>
           </div>
         </div>
@@ -46,7 +62,12 @@ export default function NavBar() {
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
-        <Modal.Body>item 1 - preço item 2 - preco</Modal.Body>
+        <Modal.Body>
+          12312
+          {cart.map((item) => (
+              <p>12312</p>
+          ))}
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Fechar
