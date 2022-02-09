@@ -8,6 +8,7 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
   const handleShow = () => setShow(true);
 
   const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     if (token) {
       const init = {
@@ -21,6 +22,16 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
         .then((response) => response.json())
         .then((data) => {
           setCart(data);
+          setTotal(
+            data.reduce(function(total, elem){
+              return total + (elem.id_courses.price)
+            })
+          )
+          let valor = 0;
+          data.forEach(element => {
+            valor = parseFloat(valor) + parseFloat(element.id_courses.price)
+          });
+          setTotal(valor)
         })
         .catch((error) => console.log(error));
     }
@@ -83,10 +94,16 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
           <div className="navbar-nav">
             {token ? (
               <>
-                <Link to="/categories" className="nav-link active text-white fw-bold">
+                <Link
+                  to="/categories"
+                  className="nav-link active text-white fw-bold"
+                >
                   Categorias
                 </Link>
-                <Link to="/categories" className="nav-link active text-white fw-bold">
+                <Link
+                  to="/categories"
+                  className="nav-link active text-white fw-bold"
+                >
                   Meu pedidos
                 </Link>
                 <NavDropdown title="Cursos" id="basic-nav-dropdown">
@@ -114,12 +131,18 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
               </>
             ) : (
               <>
-              <Link to="/login" className="nav-link active text-white fw-bold">
+                <Link
+                  to="/login"
+                  className="nav-link active text-white fw-bold"
+                >
                   Login
-              </Link>
-              <Link to="/register" className="nav-link active text-white fw-bold">
+                </Link>
+                <Link
+                  to="/register"
+                  className="nav-link active text-white fw-bold"
+                >
                   Cadastrar
-              </Link>
+                </Link>
               </>
             )}
           </div>
@@ -130,16 +153,41 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {cart.map((item) => (
-            <>
-              <p key={item.id}>
-                {item.id_courses.name} {item.id}
-              </p>
-              <button type="button" onClick={(e) => removeItemCart(item.id)}>
-                Remover
-              </button>
-            </>
-          ))}
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Ações</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.id_courses.name}</td>
+                  <td>{item.id_courses.price.toFixed(2)}</td>
+                  <td>{item.id_courses.description}</td>
+                  <td>{item.id_courses.id_category}</td>
+                  <td>
+                    <button type="button" className="btn btn-danger" onClick={(e) => removeItemCart(item.id)}>Remover</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>R${total}</td>
+              </tr>
+            </tfoot>
+          </table>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

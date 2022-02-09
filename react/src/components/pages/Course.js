@@ -41,10 +41,17 @@ export default function Course() {
   return (
     <div>
       <div className="row">
-        <div className="col-4">
+        <div className="col-12">
           <div className="card">
-            <div className="card-body">{course.name}</div>
-            <button type="button" onClick={(e) => addToCart(course.id)}>Adicionar ao carrinho</button>
+          <div className="card-header fw-bold">{course.name}</div>
+              <div className="card-body">
+                <p>Valor: R$ {course.price.toFixed(2)}</p>
+                <p>Descrição: {course.description}</p>
+                {/* <p>Categoria: {item.</p> */}
+              </div>
+          <div className="card-footer text-center">
+              <button type="button" className="btn btn-primary w-50" onClick={(e) => addToCart(course.id)}>Adicionar ao carrinho</button>
+            </div>
           </div>
         </div>
       </div>
