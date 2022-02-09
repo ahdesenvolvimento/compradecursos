@@ -9,6 +9,16 @@ from django.http import Http404, JsonResponse
 from .models import *
 from .serializers import CartCourserSerializer, CategorySerliazer, CourseSerliazer, LogoutSerializer, PaymentSerliazer, UserSerializer
 
+@permission_classes([IsAuthenticated])
+@api_view(['POST', 'GET'])
+def index(request):
+    if request.method == 'POST':
+        if 'search' in request.data:
+            courses = Course.objects.filter(name__contains=request.data['search']).order_by('-created')
+            serializer = CourseSerliazer(courses, many=True)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+    return JsonResponse({}, safe=False, status=status.HTTP_200_OK)
+
 class ListUser(APIView):
     def get(self, request, *args, **kwargs):   
         users = User.objects.all()
@@ -29,7 +39,7 @@ class ListCourses(APIView):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        # request.data['user'] = request.user.id
+        request.data['user'] = request.user.id
         serializer = CourseSerliazer(data=request.data)
         # Course.objects.create(
         #     name=request.data['name'],

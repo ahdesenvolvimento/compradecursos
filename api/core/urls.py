@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import CartDetail, CategoriesDetail, ListCart, ListCategories, ListCourses, CourseDetail, ListUser, LogoutApi
+from .views import CartDetail, CategoriesDetail, ListCart, ListCategories, ListCourses, CourseDetail, ListUser, LogoutApi, index
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
+    path('', index, name='index'),
     path('courses/', ListCourses.as_view(), name="list_courses"),
     path('courses/<int:pk>', CourseDetail.as_view(), name="detail_courses"),
     path('categories/', ListCategories.as_view(), name="list_categories"),
