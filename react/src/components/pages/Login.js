@@ -1,10 +1,11 @@
 import Input from "../layout/Input";
 import { useState } from "react";
 import SubmitButton from "../layout/SubmitButton";
-import { Link } from "react-router-dom";
-export default function Login() {
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./Login.module.css";
+export default function Login({statusNav, setStatusNav}) {
   const [user, setUser] = useState([]);
-
+  let navigate = useNavigate();
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -24,12 +25,13 @@ export default function Login() {
         console.log(data)
         localStorage.setItem("access-token", data.access);
         localStorage.setItem("refresh-token", data.refresh);
-        console.log(localStorage.getItem('access-token'));
+        setStatusNav(true);
+        navigate('/');
       })
       .catch((error) => console.log(error));
   };
   return (
-    <div>
+    <div className={styles.content + ' mt-3 mb-3'}>
       <form action="" method="POST" onSubmit={login}>
         <Input
           type="text"

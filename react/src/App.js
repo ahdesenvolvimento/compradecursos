@@ -9,18 +9,26 @@ import Courses from "./components/pages/Courses";
 import NavBar from "./components/layout/Navbar";
 import Course from "./components/pages/Course";
 import { Card } from "react-bootstrap";
+import { useEffect, useState } from "react";
 function App() {
+  const [statusNav, setStatusNav] = useState(false)
   const token = localStorage.getItem('access-token');
+  useEffect(() => {
+    if (token){
+      setStatusNav(true);
+    }
+  }, [])
   return (
     <Router>
-      <div className="container">
-        <NavBar />
-      </div>
+      <header className="bg-secondary">
+       <NavBar token={token} statusNav={statusNav} setStatusNav={setStatusNav}/>
+
+      </header>
       <div className="container mt-3">
         <Card>
           <Card.Body>
           <Routes>
-            {token ? (<>
+            {token && statusNav ? (<>
               <Route path="/" element={<Home />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/courses" element={<Courses />} />
@@ -28,10 +36,9 @@ function App() {
               <Route path="*" element={<Navigate to="/" />} />
             </>) : (
             <>
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login statusNav={statusNav} setStatusNav={setStatusNav}/>} />
               <Route path="/register" element={<Register />} />
               <Route path="*" element={<Navigate to="/login" />} />
-            
             </>)}
           </Routes>
         </Card.Body>

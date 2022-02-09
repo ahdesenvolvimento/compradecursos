@@ -2,6 +2,7 @@ import Input from "../layout/Input";
 import SubmitButton from "../layout/SubmitButton";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import styles from "./Login.module.css";
 export default function Register() {
   const [user, setUser] = useState([]);
 
@@ -24,7 +25,7 @@ export default function Register() {
       .catch((error) => console.log(error));
   };
   return (
-    <div>
+    <div className={styles.content + ' mt-3 mb-3'}>
       <form method="POST" action="" onSubmit={register}>
         <Input
           type="text"

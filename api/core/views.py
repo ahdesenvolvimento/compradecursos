@@ -24,7 +24,7 @@ class ListUser(APIView):
 
 class ListCourses(APIView):
     def get(self, request, *args, **kwargs):   
-        courses = Course.objects.all()
+        courses = Course.objects.all().order_by('-created')
         serializer = CourseSerliazer(courses, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 

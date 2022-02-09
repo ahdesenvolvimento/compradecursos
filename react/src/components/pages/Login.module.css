@@ -1,0 +1,14 @@
+.content{
+    display: flex;
+    justify-content: center;
+}
+
+.content input {
+    width: 500px;
+}
+
+@media (max-width:768px){
+    .content input{
+        width: 100%;
+    }
+}
