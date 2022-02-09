@@ -153,7 +153,9 @@ class CartDetail(APIView):
     def delete(self, request, pk):
         cart = self.get_object(pk)
         cart.delete()
-        return JsonResponse({}, status=status.HTTP_204_NO_CONTENT)
+        items = CartCourses.objects.filter(id_cart__user=request.user).filter(status=False)
+        serializer = CartCourserSerializer(items, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
 class ListOrder(APIView):

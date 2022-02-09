@@ -5,11 +5,15 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    getItemsCart();
+    setShow(true);
+  };
 
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
-  useEffect(() => {
+
+  const getItemsCart = () => {
     if (token) {
       const init = {
         method: "GET",
@@ -22,20 +26,15 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
         .then((response) => response.json())
         .then((data) => {
           setCart(data);
-          setTotal(
-            data.reduce(function(total, elem){
-              return total + (elem.id_courses.price)
-            })
-          )
           let valor = 0;
-          data.forEach(element => {
-            valor = parseFloat(valor) + parseFloat(element.id_courses.price)
+          data.forEach((element) => {
+            valor = parseFloat(valor) + parseFloat(element.id_courses.price);
           });
-          setTotal(valor)
+          setTotal(valor);
         })
         .catch((error) => console.log(error));
     }
-  }, []);
+  };
 
   const removeItemCart = (e) => {
     const init = {
@@ -48,7 +47,12 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
     fetch("http://localhost:8000/cart/" + e, init)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        setCart(data);
+        let valor = 0;
+        data.forEach((element) => {
+          valor = parseFloat(valor) + parseFloat(element.id_courses.price);
+        });
+        setTotal(valor);
       })
       .catch((error) => console.log(error));
   };
@@ -150,47 +154,59 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
       </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Carrinho</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Preço</th>
-                <th>Descrição</th>
-                <th>Categoria</th>
-                <th>Ações</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cart.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id_courses.name}</td>
-                  <td>{item.id_courses.price.toFixed(2)}</td>
-                  <td>{item.id_courses.description}</td>
-                  <td>{item.id_courses.id_category}</td>
-                  <td>
-                    <button type="button" className="btn btn-danger" onClick={(e) => removeItemCart(item.id)}>Remover</button>
-                  </td>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Preço</th>
+                  <th>Descrição</th>
+                  <th>Categoria</th>
+                  <th>Ações</th>
+                  <th>Total</th>
                 </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>Total</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>R${total}</td>
-              </tr>
-            </tfoot>
-          </table>
+              </thead>
+              <tbody>
+                {cart.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id_courses.name}</td>
+                    <td>{item.id_courses.price.toFixed(2)}</td>
+                    <td>{item.id_courses.description}</td>
+                    <td>{item.id_courses.id_category}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={(e) => removeItemCart(item.id)}
+                      >
+                        Remover
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>Total</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>R${total}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" ><Link to="/order" className="text-white">Finalizar pedido</Link></Button>
+          <Button variant="primary">
+            <Link to="/order" className="text-white">
+              Finalizar pedido
+            </Link>
+          </Button>
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>

@@ -20,7 +20,6 @@ export default function Course() {
         setCourse(data)
       })
       .catch((error) => console.log(error));
-    console.log(course);
   };
 
   const addToCart = (e) => {

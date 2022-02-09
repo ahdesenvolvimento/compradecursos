@@ -52,7 +52,7 @@ export default function Home() {
         {courses ? (
           <>
             {courses.map((item) => (
-              <div className="col-4">
+              <div className="col-4" key={item.id}>
                 <div className="card">
                   <div className="card-header fw-bold">{item.name}</div>
                   <div className="card-body">
