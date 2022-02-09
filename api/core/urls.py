@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CategoriesDetail, ListCart, ListCategories, ListCourses, CourseDetail, ListUser, LogoutApi
+from .views import CartDetail, CategoriesDetail, ListCart, ListCategories, ListCourses, CourseDetail, ListUser, LogoutApi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -11,6 +11,7 @@ urlpatterns = [
     path('users/', ListUser.as_view(), name="list_users"),
     path('logout/', LogoutApi.as_view(), name="logout"),
     path('cart/', ListCart.as_view(), name="list_cart"),
+    path('cart/<int:pk>', CartDetail.as_view(), name='detail_cart'),
 ]
 
 urlpatterns += [

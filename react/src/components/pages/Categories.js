@@ -10,7 +10,7 @@ export default function Categories() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Autorization:'Bearer ' + localStorage.getItem('access-token')
+        Authorization:'Bearer ' + localStorage.getItem('access-token')
       },
       body: JSON.stringify(categorie),
     };

@@ -32,7 +32,7 @@ class CartCourserSerializer(serializers.ModelSerializer):
     id_courses = CourseSerliazer()
     class Meta:
         model = CartCourses
-        fields = ('id_cart', 'id_courses', )
+        fields = ('id_cart', 'id_courses', 'id', )
 
         
 class LogoutSerializer(serializers.Serializer):

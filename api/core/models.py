@@ -1,4 +1,5 @@
 from pyexpat import model
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -28,7 +29,7 @@ class Course(Base):
     price = models.FloatField()
     description = models.TextField()
     id_category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, default='')
-    image = models.ImageField(upload_to='media/', null=True, default='')
+    # image = models.FileField(upload_to='media/', null=True, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default='')
     class Meta:
         db_table = 'course'
@@ -44,6 +45,7 @@ class CartCourses(Base):
     id = models.AutoField(primary_key=True)
     id_cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     id_courses = models.ForeignKey(Course, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'cart_courses'

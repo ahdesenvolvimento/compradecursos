@@ -37,7 +37,6 @@ export default function Courses() {
       .then()
       .then()
       .catch((error) => console.log(error));
-    console.log(course);
   };
 
   const handleChange = (e) => {
@@ -46,16 +45,16 @@ export default function Courses() {
  
   return (
     <div>
-      <form method="POST" action="" onSubmit={createCourse} encType="multipart/form">
+      <form method="POST" action="" onSubmit={createCourse}>
         <Input
           type="text"
           name="name"
-          placeholder="Nome da categoria"
+          placeholder="Nome do curso"
           handleOnChange={handleChange}
-          text="Nome da categoria"
+          text="Nome do cursos"
         />
         <Input
-          type="text"
+          type="number"
           name="price"
           placeholder="Preço"
           handleOnChange={handleChange}
@@ -67,13 +66,6 @@ export default function Courses() {
           placeholder="Descrição"
           handleOnChange={handleChange}
           text="Descrição"
-        />
-        <Input
-          type="file"
-          name="image"
-          placeholder="Imagem"
-          handleOnChange={handleChange}
-          text="Imagem"
         />
         <Select text="Selecione a opção" name="id_category" handleOnChange={handleChange} options={categories}/>
         <SubmitButton text="Criar" />

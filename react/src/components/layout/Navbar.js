@@ -12,20 +12,39 @@ export default function NavBar() {
     const init = {
       method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('access-token'),
-      }
-    }
-    fetch('http://localhost:8000/cart/', init)
-    .then((response) => response.json())
-    .then((data) => {
-      setCart(data)
-    }).catch((error) => console.log(error))
-  }, [])
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access-token"),
+      },
+    };
+    fetch("http://localhost:8000/cart/", init)
+      .then((response) => response.json())
+      .then((data) => {
+        setCart(data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const removeItemCart = (e) => {
+    const init = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access-token"),
+      },
+    };
+    fetch("http://localhost:8000/cart/" + e, init)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
-        <Link to="/" className="navbar-brand" >Compra de Cursos</Link>
+        <Link to="/" className="navbar-brand">
+          Compra de Cursos
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -42,19 +61,28 @@ export default function NavBar() {
           id="navbarNavAltMarkup"
         >
           <div className="navbar-nav">
-            <Link to="/categories" className="nav-link active">Categorias</Link>
+            <Link to="/categories" className="nav-link active">
+              Categorias
+            </Link>
+            <Link to="/categories" className="nav-link active">
+              Meu pedidos
+            </Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item ><Link to="/courses">Criar Curso</Link></NavDropdown.Item>
-              <NavDropdown.Item ><Link to="/courses">Meus Cursos</Link></NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/courses">Criar Curso</Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/courses">Meus Cursos</Link>
+              </NavDropdown.Item>
             </NavDropdown>
-            <a
+            <button
               className="nav-link active"
               onClick={handleShow}
               aria-current="page"
               href="#/"
             >
               Carrinho
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -63,9 +91,15 @@ export default function NavBar() {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          12312
           {cart.map((item) => (
-              <p>12312</p>
+            <>
+              <p key={item.id}>
+                {item.id_courses.name} {item.id}
+              </p>
+              <button type="button" onClick={(e) => removeItemCart(item.id)}>
+                Remover
+              </button>
+            </>
           ))}
         </Modal.Body>
         <Modal.Footer>
