@@ -28,6 +28,11 @@ class CartCourserSerializer(serializers.ModelSerializer):
         model = CartCourses
         fields = ('id_cart', 'id_courses', 'id', )
 
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
         
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()

@@ -110,14 +110,12 @@ export default function NavBar({ token, statusNav, setStatusNav }) {
                 >
                   Meu pedidos
                 </Link>
-                <NavDropdown title="Cursos" id="basic-nav-dropdown">
-                  <NavDropdown.Item>
-                    <Link to="/courses">Criar Curso</Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Item>
-                    <Link to="/courses">Meus Cursos</Link>
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <Link
+                  to="/courses"
+                  className="nav-link active text-white fw-bold"
+                >
+                  Criar curso
+                </Link>
                 <a
                   className="nav-link active text-white fw-bold"
                   onClick={handleShow}

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import serializers, status
 from django.http import Http404, JsonResponse
 from .models import *
-from .serializers import CartCourserSerializer, CategorySerliazer, CourseSerliazer, LogoutSerializer, UserSerializer
+from .serializers import CartCourserSerializer, CategorySerliazer, CourseSerliazer, LogoutSerializer, OrderSerializer, UserSerializer
 
 @permission_classes([IsAuthenticated])
 @api_view(['POST', 'GET'])
@@ -54,7 +54,6 @@ class CourseDetail(APIView):
             raise Http404
     
     def get(self, request, pk):
-        print('to aqui')
         course = self.get_object(pk)
         serializer = CourseSerliazer(course)
         return JsonResponse(serializer.data, safe=False)
@@ -80,7 +79,6 @@ class ListCategories(APIView):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
         serializer = CategorySerliazer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -160,8 +158,8 @@ class CartDetail(APIView):
 
 class ListOrder(APIView):
     def get(self, request, *args, **kwargs):
-        # order = Order.objects.   
         items = CartCourses.objects.filter(id_cart__user=request.user).filter(status=False)
+        
         serializer = CartCourserSerializer(items, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
@@ -172,10 +170,18 @@ class ListOrder(APIView):
             user=request.user
         )
         items_order = [(CartOrder.objects.create(id_order=order, id_cart_courses=CartCourses.objects.get(id_cart__user=request.user, status=False, id=item.id)), CartCourses.objects.filter(id=item.id).filter(status=False).update(status=True)) for item in items]
-        print(items_order)
-        # serializer = CartCourserSerializer(data={'id_course':request.data['id_course'], 'id_cart':id_cart.id})
-        # print(serializer)
-        # if serializer.is_valid():
-        #     serializer.save()
         return JsonResponse({}, status=status.HTTP_201_CREATED)
-        # return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@permission_classes([IsAuthenticated])
+@api_view(['POST', 'GET'])
+def get_order_owner(request):
+    order = Order.objects.filter(user=request.user)   
+    serializer_order = OrderSerializer(order, many=True)
+    items = CartCourses.objects.filter(id_cart__user=request.user).filter(status=False)
+        
+    serializer = CartCourserSerializer(items, many=True)
+    dicionario = {
+        'order':serializer_order.data,
+        'items':serializer.data
+    }
+    return JsonResponse(dicionario, safe=False, status=status.HTTP_200_OK)
